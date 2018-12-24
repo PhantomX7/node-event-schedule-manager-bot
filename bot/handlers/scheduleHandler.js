@@ -16,7 +16,7 @@ function paginize(schedules) {
     }
   )
   const makeScheduleCard = (scheduleEntry) => {
-    const expiredStatus = moment().diff(moment(scheduleEntry[1].date)) > 24*60*60*1000 ? ' - Expired' : ''
+    const expiredStatus = moment(moment().format('YYYY-MM-DD')).diff(moment(moment(scheduleEntry[1].date).format('YYYY-MM-DD'))) >= 24*60*60*1000 ? ' - Expired' : ''
     return {
       title: `[${+scheduleEntry[0] + 1}${expiredStatus}] ${scheduleEntry[1].name}`,
       text: moment(scheduleEntry[1].date).format('D MMMM YYYY (HH:mm)'),
@@ -28,7 +28,7 @@ function paginize(schedules) {
 
   const scheduleEntries = _.chain(schedules)
     .sortBy([
-      schedule => moment().diff(moment(schedule.date)) > 24*60*60*1000 ? 1 : 0,
+      schedule => moment(moment().format('YYYY-MM-DD')).diff(moment(moment(schedule.date).format('YYYY-MM-DD'))) >= 24*60*60*1000 ? 1 : 0,
       schedule => moment(schedule.date).valueOf()
     ])
     .entries()
