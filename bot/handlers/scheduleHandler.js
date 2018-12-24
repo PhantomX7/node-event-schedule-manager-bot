@@ -19,7 +19,7 @@ function paginize(schedules) {
     const expiredStatus = moment().diff(moment(scheduleEntry[1].date)) > 24*60*60*1000 ? ' - Expired' : ''
     return {
       title: `[${+scheduleEntry[0] + 1}${expiredStatus}] ${scheduleEntry[1].name}`,
-      text: moment(scheduleEntry[1].date).format('D MMMM YYYY'),
+      text: moment(scheduleEntry[1].date).format('D MMMM YYYY (HH:mm)'),
       menuItems: [
         { type: 'postback', label: "View Detail", data: `!schedule_detail ${scheduleEntry[1]._id}` }
       ]
@@ -116,9 +116,9 @@ async function handler(bot, evt, command, arguments) {
           [Schedule Detail]
           Name: ${event.name}
           Type: ${event.type}
-          Date: ${moment(event.date).format('DD MMMM YYYY')}
+          Date: ${moment(event.date).format('D MMMM YYYY (HH:mm)')}
           Created By: ${profile.displayName}
-          Created At: ${moment(event.createdAt).format('DD MMMM YYYY')}
+          Created At: ${moment(event.createdAt).format('D MMMM YYYY (HH:mm)')}
         `)
       ))
     } catch (err) {

@@ -21,7 +21,7 @@ function paginize(seminars) {
     const expiredStatus = moment().diff(moment(seminarEntry[1].date)) > 24*60*60*1000 ? ' - Expired' : ''
     return {
       title: `[${+seminarEntry[0] + 1}${expiredStatus}] ${seminarEntry[1].name}`,
-      text: moment(seminarEntry[1].date).format('D MMMM YYYY'),
+      text: moment(seminarEntry[1].date).format('D MMMM YYYY (HH:mm)'),
       menuItems: [
         { type: 'postback', label: "View Detail", data: `!seminar_detail ${seminarEntry[1]._id}` },
         { type: 'postback', label: "Edit", data: `!seminar_edit_template ${seminarEntry[1]._id}` },
@@ -121,9 +121,9 @@ async function handler(bot, evt, command, arguments) {
         helper.trimAround(`
           [Seminar Detail]
           Name: ${event.name}
-          Date: ${moment(event.date).format('DD MMMM YYYY')}
+          Date: ${moment(event.date).format('D MMMM YYYY (HH:mm)')}
           Created By: ${profile.displayName}
-          Created At: ${moment(event.createdAt).format('DD MMMM YYYY')}
+          Created At: ${moment(event.createdAt).format('D MMMM YYYY (HH:mm)')}
         `)
       ))
     } catch (err) {
@@ -136,14 +136,14 @@ async function handler(bot, evt, command, arguments) {
     try {
       if (_.size(arguments) !== 2)
         return await evt.reply(withFlashes('Arguments must be exactly 2!'))
-      if (!moment(arguments[1], 'DD-MM-YYYY', true).isValid()) 
+      if (!moment(arguments[1], 'D-M-YYYY#H:mm', true).isValid()) 
         return await evt.reply(withFlashes('Invalid date!'))
 
       const { userId, groupId, type } = evt.source
       await db.Event.create(
         {
           name: arguments[0],
-          date: moment(arguments[1], 'DD-MM-YYYY').toDate(),
+          date: moment(arguments[1], 'D-M-YYYY#H:mm').toDate(),
           createdBy: userId,
           groupId: groupId || null,
           envType: type,
@@ -160,7 +160,7 @@ async function handler(bot, evt, command, arguments) {
   } else if (command === '!seminar_add_template') {
     await evt.reply(withFlashes(
       `Please copy below input template and replace "seminar name" and "date" as you wish, then Send`,
-      `!seminar_add "seminar name" ${moment().format('DD-MM-YYYY')}`
+      `!seminar_add "seminar name" ${moment().format('DD-MM-YYYY#HH:mm')}`
     ))
   
 
@@ -192,7 +192,7 @@ async function handler(bot, evt, command, arguments) {
       await evt.reply(withFlashes(
         template.makeConfirm(
           {
-            title: `Delete ${event.name} [${moment().format('DD-MM-YYYY')}] ?`,
+            title: `Delete ${event.name} [${moment().format('D MMMM YYYY (HH:mm)')}] ?`,
             type: 'postback',
             yesText: `!seminar_delete ${event._id}`,
             noText: `!seminar_view`
@@ -209,14 +209,14 @@ async function handler(bot, evt, command, arguments) {
     try {
       if (_.size(arguments) !== 3) 
         return await evt.reply(withFlashes('Arguments must be exactly 3!'))
-      if (!moment(arguments[2], 'DD-MM-YYYY', true).isValid()) 
+      if (!moment(arguments[2], 'D-M-YYYY#H:mm', true).isValid()) 
         return await evt.reply(withFlashes('Invalid date!'))
       const event = await db.Event.findById(arguments[0])
       if (!event) 
         return await evt.reply(withFlashes('Seminar not found!'))
 
       event.name = arguments[1]
-      event.date = moment(arguments[2], 'DD-MM-YYYY').toDate()
+      event.date = moment(arguments[2], 'D-M-YYYY#H:mm').toDate()
       await event.save()
       await evt.reply(withFlashes(
         await getViewSeminarMenu(evt),
@@ -235,7 +235,7 @@ async function handler(bot, evt, command, arguments) {
 
       await evt.reply(withFlashes(
         `Please copy below edit template and replace "seminar name" and "date" as you wish, then Send`,
-        `!seminar_edit ${event._id} "${event.name}" ${moment(event.date).format('DD-MM-YYYY')}`
+        `!seminar_edit ${event._id} "${event.name}" "${moment(event.date).format('DD-MM-YYYY#HH:mm')}"`
       ))
     } catch (err) {
       await evt.reply(withFlashes('Request failed. Please try again later.'))
