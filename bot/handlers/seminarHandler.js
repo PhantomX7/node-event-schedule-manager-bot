@@ -136,14 +136,14 @@ async function handler(bot, evt, command, arguments) {
     try {
       if (_.size(arguments) !== 2)
         return await evt.reply(withFlashes('Arguments must be exactly 2!'))
-      if (!moment(arguments[1], 'D-M-YYYY#H:mm', true).isValid()) 
+      if (!moment(arguments[1], 'D-M-YYYY#H:m', true).isValid()) 
         return await evt.reply(withFlashes('Invalid date!'))
 
       const { userId, groupId, type } = evt.source
       await db.Event.create(
         {
           name: arguments[0],
-          date: moment(arguments[1], 'D-M-YYYY#H:mm').toDate(),
+          date: moment(arguments[1], 'D-M-YYYY#H:m').toDate(),
           createdBy: userId,
           groupId: groupId || null,
           envType: type,
@@ -209,14 +209,14 @@ async function handler(bot, evt, command, arguments) {
     try {
       if (_.size(arguments) !== 3) 
         return await evt.reply(withFlashes('Arguments must be exactly 3!'))
-      if (!moment(arguments[2], 'D-M-YYYY#H:mm', true).isValid()) 
+      if (!moment(arguments[2], 'D-M-YYYY#H:m', true).isValid()) 
         return await evt.reply(withFlashes('Invalid date!'))
       const event = await db.Event.findById(arguments[0])
       if (!event) 
         return await evt.reply(withFlashes('Seminar not found!'))
 
       event.name = arguments[1]
-      event.date = moment(arguments[2], 'D-M-YYYY#H:mm').toDate()
+      event.date = moment(arguments[2], 'D-M-YYYY#H:m').toDate()
       await event.save()
       await evt.reply(withFlashes(
         await getViewSeminarMenu(evt),
