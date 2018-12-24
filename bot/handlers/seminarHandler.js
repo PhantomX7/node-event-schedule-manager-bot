@@ -18,7 +18,7 @@ function paginize(seminars) {
     }
   )
   const makeSeminarCard = (seminarEntry) => {
-    const expiredStatus = moment().diff(moment(seminarEntry[1].date)) > 24*60*60*1000 ? ' - Expired' : ''
+    const expiredStatus = moment(moment().format('YYYY-MM-DD')).diff(moment(moment(seminarEntry[1].date).format('YYYY-MM-DD'))) >= 24*60*60*1000 ? ' - Expired' : ''
     return {
       title: `[${+seminarEntry[0] + 1}${expiredStatus}] ${seminarEntry[1].name}`,
       text: moment(seminarEntry[1].date).format('D MMMM YYYY (HH:mm)'),
