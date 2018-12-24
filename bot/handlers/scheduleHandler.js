@@ -110,6 +110,7 @@ async function handler(bot, evt, command, arguments) {
         return await evt.reply(withFlashes('Schedule not found!'))
 
       const profile = await bot.getUserProfile(event.createdBy)
+      console.log(JSON.stringify(profile, 2, 2))
       await evt.reply(withFlashes(
         helper.trimAround(`
           [Schedule Detail]
