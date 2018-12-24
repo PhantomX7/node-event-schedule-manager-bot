@@ -32,7 +32,7 @@ function paginize(seminars) {
 
   const seminarEntries = _.chain(seminars)
     .sortBy([
-      seminar => moment(moment().format('YYYY-MM-DD')).diff(moment(moment(seminarEntry[1].date).format('YYYY-MM-DD'))) >= 24*60*60*1000 ? 1 : 0,
+      seminar => moment(moment().format('YYYY-MM-DD')).diff(moment(moment(seminar.date).format('YYYY-MM-DD'))) >= 24*60*60*1000 ? 1 : 0,
       seminar => moment(seminar.date).valueOf()
     ])
     .entries()
