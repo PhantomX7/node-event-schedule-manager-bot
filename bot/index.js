@@ -56,7 +56,7 @@ async function webhookHandler(evt) {
             title: 'Main Menu',
             columns: [
               {
-                title: "Event Schedule Manager Bot [Menu 1]", 
+                title: "Event Schedule Manager Bot", 
                 text: "Choose an action",
                 menuItems: [
                   { type: 'postback', label: "View All Schedule", data: "!schedule_view" },
@@ -65,7 +65,7 @@ async function webhookHandler(evt) {
                 ]
               },
               {
-                title: "Event Schedule Manager Bot [Menu 2]",
+                title: "Event Schedule Manager Bot",
                 text: "Choose an action",
                 menuItems: [
                   { type: 'postback', label: "View Seminars", data: "!seminar_view" },
