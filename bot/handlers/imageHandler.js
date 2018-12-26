@@ -179,6 +179,7 @@ async function handler(bot, evt, command, arguments) {
           'Image deleted successfully!'
         ))
       } catch (err) {
+        console.log(err)
         await evt.reply(withFlashes('Request failed. Please try again later.'))
       }
     } else if (command === '!image_delete_confirm') {
@@ -235,11 +236,13 @@ async function handler(bot, evt, command, arguments) {
             ))
             console.log('done')
           } catch (error) {
+            console.log(error)
             await evt.reply(withFlashes('Request failed. Please try again later.'))
           }
         }
       ).end(buffer)
     } catch (error) {
+      console.log(error)
       return await evt.reply(withFlashes('Request failed. Please try again later.'))
     }
   }
